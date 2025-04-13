@@ -1,20 +1,20 @@
-import React, { useState } from "react";
-import ReactDOMServer from "react-dom/server";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import React, { useState } from 'react';
+import ReactDOMServer from 'react-dom/server';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { format } from "date-fns";
-import { CalendarIcon, Printer, FileSpreadsheet, FileText } from "lucide-react";
-import SalesReportTable from "./SalesReportTable";
-import PrintableSalesReport from "./PrintableSalesReport";
+} from '@/components/ui/popover';
+import { format } from 'date-fns';
+import { CalendarIcon, Printer, FileSpreadsheet, FileText } from 'lucide-react';
+import SalesReportTable from './SalesReportTable';
+import PrintableSalesReport from './PrintableSalesReport';
 // main.tsx or index.tsx
-import "../../index.css";
+import '../../index.css';
 
 interface SalesReportPanelProps {
   tenantName?: string;
@@ -44,11 +44,11 @@ interface SalesReportPanelProps {
 }
 
 const SalesReportPanel = ({
-  tenantName = "Tenant Name",
-  tradeName = "Tradename",
-  branch = "Branch",
-  month = "JANUARY",
-  year = "2025",
+  tenantName = 'Tenant Name',
+  tradeName = 'Tradename',
+  branch = 'Branch',
+  month = 'JANUARY',
+  year = '2025',
   salesData = [
     {
       date: 1,
@@ -104,7 +104,7 @@ const SalesReportPanel = ({
     },
   ],
 }: SalesReportPanelProps) => {
-  const [reportType, setReportType] = useState("monthly");
+  const [reportType, setReportType] = useState('monthly');
   const [date, setDate] = useState<Date | undefined>(new Date());
 
   // Calculate totals
@@ -144,7 +144,7 @@ const SalesReportPanel = ({
       localTax: 0,
       serviceCharge: { distributed: 0, retained: 0 },
       grossSales: 0,
-    },
+    }
   );
 
   // Calculate VAT and other values
@@ -156,28 +156,16 @@ const SalesReportPanel = ({
   return (
     <>
       {/* --- UI Controls (NOT visible in print) --- */}
-      <CardHeader
-        className="print:hidden"
-        style={{
-          display: "block",
-          "@media print": { display: "none !important" },
-        }}
-      >
+      <CardHeader className="print:hidden">
         <CardTitle className="flex items-center justify-between text-white">
           <span>Sales Reports</span>
-          <div
-            className="flex items-center space-x-2 print:hidden"
-            style={{
-              display: "flex",
-              "@media print": { display: "none !important" },
-            }}
-          >
+          <div className="flex items-center space-x-2 print:hidden">
             <Button
               variant="outline"
               size="sm"
               className="h-8 px-2 text-black"
               onClick={() => {
-                const printWindow = window.open("", "_blank");
+                const printWindow = window.open('', '_blank');
                 if (!printWindow) return;
 
                 const htmlContent = ReactDOMServer.renderToStaticMarkup(
@@ -192,7 +180,7 @@ const SalesReportPanel = ({
                       salesData={salesData}
                       reportType={reportType as any}
                     />
-                  </div>,
+                  </div>
                 );
 
                 printWindow.document.write(`
@@ -288,45 +276,33 @@ const SalesReportPanel = ({
           >
             {/* --- Tabs UI: Hidden in print --- */}
             <div className="flex justify-between items-center mb-4">
-              <TabsList
-                className="print:hidden"
-                style={{ "@media print": { display: "none !important" } }}
-              >
+              <TabsList className="print:hidden">
                 <TabsTrigger value="daily">Daily Report</TabsTrigger>
                 <TabsTrigger value="monthly">Monthly Report</TabsTrigger>
               </TabsList>
-              <Popover
-                className="print:hidden"
-                style={{ "@media print": { display: "none !important" } }}
-              >
-                <PopoverTrigger asChild>
-                  <Button variant="outline" className="w-[240px] text-left">
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {date ? format(date, "PPP") : <span>Pick a date</span>}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent align="end" className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
+              <div className="print:hidden">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" className="w-[240px] text-left">
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {date ? format(date, 'PPP') : <span>Pick a date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent align="end" className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={date}
+                      onSelect={setDate}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
             </div>
 
             {/* --- PRINTABLE CONTENT BELOW --- */}
-            <div
-              className="print-content"
-              style={{
-                "@media print": {
-                  display: "block !important",
-                  visibility: "visible !important",
-                },
-              }}
-            >
-              {reportType === "monthly" ? (
+            <div className="print-content">
+              {reportType === 'monthly' ? (
                 <MonthlySalesReport
                   tradeName={tradeName}
                   branch={branch}
@@ -728,7 +704,7 @@ const DailySalesReport = ({
   totals,
   tenantName,
 }) => {
-  const formattedDate = date ? format(date, "MMMM d, yyyy") : "";
+  const formattedDate = date ? format(date, 'MMMM d, yyyy') : '';
 
   return (
     <div className="p-4">
