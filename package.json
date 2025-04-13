@@ -1,6 +1,6 @@
 {
   "name": "tsms-react",
-  "homepage": "https://iamrgalisanao.github.io/tsms-react",
+  "homepage": "https://iamrgalisanao.github.io/tsms-react/login",
   "description": "A React application for the TSMS project, providing a user-friendly interface for managing and visualizing data.",
   "author": "Rommel Galisanao",
   "private": true,
@@ -13,7 +13,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "npm run dev && gh-pages -d dist",
+    "deploy": "gh-pages -d dist",
     "types:supabase": "npx supabase gen types typescript --project-id $SUPABASE_PROJECT_ID > src/types/supabase.ts"
   },
   "dependencies": {
