@@ -1,0 +1,325 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 5 75% 52%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 212 100% 24%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 214 100% 48%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 358 85% 52%;
+
+    --sidebar-bg: 214 100% 48%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 11%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 5 75% 52%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 212 100% 24%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 217 32% 17%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 214 100% 48%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 217 32% 17%;
+    --input: 217 32% 17%;
+    --ring: 358 85% 52%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-medium tracking-tight;
+  }
+  h1 {
+    @apply text-3xl lg:text-4xl;
+  }
+  h2 {
+    @apply text-2xl lg:text-3xl;
+  }
+  h3 {
+    @apply text-xl lg:text-2xl;
+  }
+  h4 {
+    @apply text-lg lg:text-xl;
+  }
+
+  @media print {
+    body {
+      background-color: white !important;
+      color: black !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      display: block !important;
+    }
+
+    @page {
+      size: A4;
+      margin: 1cm;
+    }
+
+    /* Hide all elements except the sales report */
+    body > *:not(.print-content):not(.print-content *),
+    nav,
+    header,
+    footer,
+    aside,
+    .sidebar,
+    .navbar,
+    .header,
+    .footer,
+    button:not(.print-content button),
+    .tabs-list,
+    .print-hidden,
+    .print-content button,
+    .print-content [role="tablist"],
+    .print-content [role="tab"],
+    .print-content .popover-trigger,
+    .print-content .TabsList,
+    .print-content .TabsTrigger,
+    .print-content div[class*="flex items-center space-x-2"],
+    .print-content div[class*="CardTitle"],
+    .print-content div[class*="CardHeader"],
+    .print-content div[class*="flex justify-between"],
+    .print-content div[class*="flex items-center justify-between"],
+    .print-content svg,
+    .print-content .CalendarIcon,
+    .print-content .Printer,
+    .print-content .FileSpreadsheet,
+    .print-content .FileText {
+      display: none !important;
+      visibility: hidden !important;
+    }
+
+    /* Show only the sales report */
+    .print-content {
+      display: block !important;
+      position: static !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: auto !important;
+      overflow: visible !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      z-index: 9999 !important;
+      background-color: white !important;
+      color: black !important;
+    }
+
+    /* Hide specific elements during printing */
+    .print-content .TabsList,
+    .print-content .TabsTrigger,
+    .print-content button,
+    .print-content [role="tablist"],
+    .print-content [role="tab"],
+    .print-content div[class*="CardHeader"],
+    .print-content div[class*="flex justify-between items-center mb-4"],
+    .print-content div[class*="CardTitle"],
+    .print-content div[class*="flex items-center justify-between"],
+    .print-content div[class*="flex items-center space-x-2"],
+    .print-content svg,
+    .print-content .CalendarIcon,
+    .print-content .Printer,
+    .print-content .FileSpreadsheet,
+    .print-content .FileText,
+    .print-content .Popover,
+    .print-content .PopoverTrigger,
+    .print-content .PopoverContent {
+      display: none !important;
+      visibility: hidden !important;
+    }
+
+    /* Ensure nested print-content elements display properly */
+    .print-content .print-content {
+      position: relative !important;
+    }
+
+    /* Ensure tables display properly */
+    table {
+      page-break-inside: avoid !important;
+      display: table !important;
+      width: 100% !important;
+      border-collapse: collapse !important;
+      visibility: visible !important;
+    }
+
+    tr {
+      display: table-row !important;
+      page-break-inside: avoid !important;
+      visibility: visible !important;
+    }
+
+    td,
+    th {
+      display: table-cell !important;
+      visibility: visible !important;
+      border: 1px solid #000 !important;
+    }
+
+    /* Prevent page breaks inside important sections */
+    .signatory-section {
+      page-break-inside: avoid !important;
+    }
+
+    /* Force background colors to show */
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+
+    /* Ensure all content in the print-content is visible */
+    .print-content * {
+      display: block !important;
+      visibility: visible !important;
+    }
+
+    .print-content table,
+    .print-content tr,
+    .print-content th,
+    .print-content td {
+      display: revert !important;
+      visibility: visible !important;
+    }
+
+    /* Specific styles for PrintableSalesReport */
+    .print-container {
+      max-width: 100% !important;
+      margin: 0 auto !important;
+      padding: 0.5cm !important;
+    }
+
+    /* Logo positioning */
+    .print-container .logo-container {
+      position: absolute !important;
+      top: 0 !important;
+      right: 0 !important;
+      width: 100px !important;
+      height: 60px !important;
+    }
+
+    /* Header styling */
+    .print-container .header-content {
+      text-align: center !important;
+      padding-top: 60px !important;
+      margin-bottom: 20px !important;
+    }
+
+    /* Table styling */
+    .print-container table {
+      width: 100% !important;
+      border-collapse: collapse !important;
+      margin-bottom: 15px !important;
+      font-size: 11px !important;
+    }
+
+    .print-container th,
+    .print-container td {
+      border: 1px solid black !important;
+      padding: 4px !important;
+    }
+
+    .print-container th {
+      background-color: #f2f2f2 !important;
+      font-weight: bold !important;
+      text-align: center !important;
+    }
+
+    .print-container td {
+      text-align: right !important;
+    }
+
+    .print-container td:first-child {
+      text-align: center !important;
+    }
+
+    /* Summary section */
+    .print-container .summary-section {
+      margin-top: 20px !important;
+      font-size: 12px !important;
+    }
+
+    /* Signatory section */
+    .print-container .signatory-section {
+      margin-top: 40px !important;
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 30px !important;
+      page-break-inside: avoid !important;
+    }
+
+    .print-container .signatory-box {
+      text-align: center !important;
+      border-top: 1px solid black !important;
+      padding-top: 10px !important;
+    }
+
+    /* Hourly report specific styles */
+    .print-container .hourly-header {
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      margin-bottom: 20px !important;
+    }
+  }
+}
