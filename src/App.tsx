@@ -23,7 +23,6 @@ export default function App() {
           <Route path="/reset-password" element={<PasswordReset />} />
           <Route path="/sales-reports" element={<SalesReportPage />} />
         </Routes>
-        {import.meta.env.VITE_TEMPO === 'true' && useRoutes(routes)}
       </>
     </Suspense>
   );
