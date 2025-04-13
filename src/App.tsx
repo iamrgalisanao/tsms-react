@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { Routes, Route, useRoutes } from 'react-router-dom';
 import Home from './components/home';
-import Login from './components/Login';
+import Login from './components/Login'; // Ensure the path and case are correct
 import PasswordReset from './components/PasswordReset';
 import SalesReportPage from './components/SalesReportPage';
 import { useAuth } from './services/auth';
@@ -18,16 +18,8 @@ export default function App() {
     <Suspense fallback={<p>Loading...</p>}>
       <>
         <Routes>
-          <Route
-            path="/"
-            element={
-              <Home
-                key={isLogoutInProgress ? 'logout' : currentUser?.id || 'guest'}
-              />
-            }
-          />
-          <Route path="/login" element={<Login />} />
           <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/reset-password" element={<PasswordReset />} />
           <Route path="/sales-reports" element={<SalesReportPage />} />
         </Routes>

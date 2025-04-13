@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { format } from "date-fns";
+import React, { useState, useEffect } from 'react';
+import { format } from 'date-fns';
 import {
   formatDisplayCurrency,
   formatDisplayDate,
   formatTSMSDate,
   formatTSMSCurrency,
-} from "@/lib/utils";
+} from '@/lib/utils';
 import {
   Download,
   Filter,
@@ -16,10 +16,10 @@ import {
   Edit,
   History,
   X,
-} from "lucide-react";
+} from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Dialog,
   DialogContent,
@@ -27,14 +27,14 @@ import {
   DialogTitle,
   DialogFooter,
   DialogDescription,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 import {
   Table,
   TableBody,
@@ -42,25 +42,25 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+} from '@/components/ui/table';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
+import { Label } from '@/components/ui/label';
 
 interface Transaction {
   id: string;
   date: Date;
   tenant: string;
   terminal: string;
-  type: "sale" | "refund" | "void";
+  type: 'sale' | 'refund' | 'void';
   amount: number;
-  status: "completed" | "pending" | "failed";
+  status: 'completed' | 'pending' | 'failed';
 }
 
 interface TransactionTableProps {
@@ -73,94 +73,94 @@ interface TransactionTableProps {
 // Mock data for demonstration
 const mockTransactions: Transaction[] = [
   {
-    id: "8a918a90-7cbd-4b44-adc0-bc3d31cee238",
-    date: new Date("2023-06-01T10:30:00"),
-    tenant: "C-T1005",
-    terminal: "POS-001",
-    type: "sale",
+    id: '8a918a90-7cbd-4b44-adc0-bc3d31cee238',
+    date: new Date('2023-06-01T10:30:00'),
+    tenant: 'C-T1005',
+    terminal: 'POS-001',
+    type: 'sale',
     amount: 24.9,
-    status: "completed",
+    status: 'completed',
   },
   {
-    id: "8a918a90-7cbd-4b44-adc0-bc3d31cee238",
-    date: new Date("2023-06-01T11:45:00"),
-    tenant: "C-T1005",
-    terminal: "POS-002",
-    type: "sale",
+    id: '8a918a90-7cbd-4b44-adc0-bc3d31cee238',
+    date: new Date('2023-06-01T11:45:00'),
+    tenant: 'C-T1005',
+    terminal: 'POS-002',
+    type: 'sale',
     amount: 59.95,
-    status: "completed",
+    status: 'completed',
   },
   {
-    id: "8a918a90-7cbd-4b44-adc0-bc3d31cee238",
-    date: new Date("2023-06-01T13:15:00"),
-    tenant: "C-T1005",
-    terminal: "POS-003",
-    type: "sale",
+    id: '8a918a90-7cbd-4b44-adc0-bc3d31cee238',
+    date: new Date('2023-06-01T13:15:00'),
+    tenant: 'C-T1005',
+    terminal: 'POS-003',
+    type: 'sale',
     amount: 87.5,
-    status: "completed",
+    status: 'completed',
   },
   {
-    id: "8a918a90-7cbd-4b44-adc0-bc3d31cee238",
-    date: new Date("2023-06-01T14:30:00"),
-    tenant: "C-T1005",
-    terminal: "POS-004",
-    type: "refund",
+    id: '8a918a90-7cbd-4b44-adc0-bc3d31cee238',
+    date: new Date('2023-06-01T14:30:00'),
+    tenant: 'C-T1005',
+    terminal: 'POS-004',
+    type: 'refund',
     amount: 45.0,
-    status: "completed",
+    status: 'completed',
   },
   {
-    id: "8a918a90-7cbd-4b44-adc0-bc3d31cee238",
-    date: new Date("2023-06-01T15:45:00"),
-    tenant: "C-T1005",
-    terminal: "POS-005",
-    type: "sale",
+    id: '8a918a90-7cbd-4b44-adc0-bc3d31cee238',
+    date: new Date('2023-06-01T15:45:00'),
+    tenant: 'C-T1005',
+    terminal: 'POS-005',
+    type: 'sale',
     amount: 299.99,
-    status: "pending",
+    status: 'pending',
   },
   {
-    id: "8a918a90-7cbd-4b44-adc0-bc3d31cee238",
-    date: new Date("2023-06-01T16:30:00"),
-    tenant: "C-T1005",
-    terminal: "POS-001",
-    type: "void",
+    id: '8a918a90-7cbd-4b44-adc0-bc3d31cee238',
+    date: new Date('2023-06-01T16:30:00'),
+    tenant: 'C-T1005',
+    terminal: 'POS-001',
+    type: 'void',
     amount: 12.5,
-    status: "completed",
+    status: 'completed',
   },
   {
-    id: "8a918a90-7cbd-4b44-adc0-bc3d31cee238",
-    date: new Date("2023-06-01T17:15:00"),
-    tenant: "C-T1005",
-    terminal: "POS-002",
-    type: "sale",
+    id: '8a918a90-7cbd-4b44-adc0-bc3d31cee238',
+    date: new Date('2023-06-01T17:15:00'),
+    tenant: 'C-T1005',
+    terminal: 'POS-002',
+    type: 'sale',
     amount: 34.95,
-    status: "failed",
+    status: 'failed',
   },
   {
-    id: "8a918a90-7cbd-4b44-adc0-bc3d31cee238",
-    date: new Date("2023-06-02T09:30:00"),
-    tenant: "C-T1005",
-    terminal: "POS-003",
-    type: "sale",
+    id: '8a918a90-7cbd-4b44-adc0-bc3d31cee238',
+    date: new Date('2023-06-02T09:30:00'),
+    tenant: 'C-T1005',
+    terminal: 'POS-003',
+    type: 'sale',
     amount: 65.75,
-    status: "completed",
+    status: 'completed',
   },
   {
-    id: "8a918a90-7cbd-4b44-adc0-bc3d31cee238",
-    date: new Date("2023-06-02T10:45:00"),
-    tenant: "C-T1005",
-    terminal: "POS-004",
-    type: "sale",
+    id: '8a918a90-7cbd-4b44-adc0-bc3d31cee238',
+    date: new Date('2023-06-02T10:45:00'),
+    tenant: 'C-T1005',
+    terminal: 'POS-004',
+    type: 'sale',
     amount: 129.99,
-    status: "completed",
+    status: 'completed',
   },
   {
-    id: "8a918a90-7cbd-4b44-adc0-bc3d31cee238",
-    date: new Date("2023-06-02T12:00:00"),
-    tenant: "C-T1005",
-    terminal: "POS-005",
-    type: "refund",
+    id: '8a918a90-7cbd-4b44-adc0-bc3d31cee238',
+    date: new Date('2023-06-02T12:00:00'),
+    tenant: 'C-T1005',
+    terminal: 'POS-005',
+    type: 'refund',
     amount: 199.99,
-    status: "pending",
+    status: 'pending',
   },
 ];
 
@@ -171,22 +171,22 @@ const TransactionTable = ({
   onExport = () => {},
   limit,
 }: TransactionTableProps & { limit?: number }) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [advancedSearchTerm, setAdvancedSearchTerm] = useState("");
-  const [searchField, setSearchField] = useState<keyof Transaction | "all">(
-    "all",
+  const [searchTerm, setSearchTerm] = useState('');
+  const [advancedSearchTerm, setAdvancedSearchTerm] = useState('');
+  const [searchField, setSearchField] = useState<keyof Transaction | 'all'>(
+    'all'
   );
-  const [selectedTenant, setSelectedTenant] = useState<string>("all_tenants");
-  const [selectedType, setSelectedType] = useState<string>("all_types");
+  const [selectedTenant, setSelectedTenant] = useState<string>('all_tenants');
+  const [selectedType, setSelectedType] = useState<string>('all_types');
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  const [sortField, setSortField] = useState<keyof Transaction>("date");
-  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
+  const [sortField, setSortField] = useState<keyof Transaction>('date');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [isAdvancedSearchOpen, setIsAdvancedSearchOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isHistoryDialogOpen, setIsHistoryDialogOpen] = useState(false);
   const [selectedTransaction, setSelectedTransaction] =
     useState<Transaction | null>(null);
-  const [editReason, setEditReason] = useState("");
+  const [editReason, setEditReason] = useState('');
   const [editedTransaction, setEditedTransaction] = useState<
     Partial<Transaction>
   >({});
@@ -197,7 +197,7 @@ const TransactionTable = ({
 
     const term = advancedSearchTerm.toLowerCase();
 
-    if (searchField === "all") {
+    if (searchField === 'all') {
       return (
         transaction.id.toLowerCase().includes(term) ||
         transaction.tenant.toLowerCase().includes(term) ||
@@ -205,17 +205,17 @@ const TransactionTable = ({
         transaction.type.toLowerCase().includes(term) ||
         transaction.status.toLowerCase().includes(term) ||
         transaction.amount.toString().includes(term) ||
-        format(transaction.date, "MMM d, yyyy").toLowerCase().includes(term)
+        format(transaction.date, 'MMM d, yyyy').toLowerCase().includes(term)
       );
     }
 
-    if (searchField === "date") {
-      return format(transaction.date, "MMM d, yyyy")
+    if (searchField === 'date') {
+      return format(transaction.date, 'MMM d, yyyy')
         .toLowerCase()
         .includes(term);
     }
 
-    if (searchField === "amount") {
+    if (searchField === 'amount') {
       return transaction.amount.toString().includes(term);
     }
 
@@ -230,13 +230,13 @@ const TransactionTable = ({
       transaction.terminal.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesTenant =
-      selectedTenant === "all_tenants" || transaction.tenant === selectedTenant;
+      selectedTenant === 'all_tenants' || transaction.tenant === selectedTenant;
     const matchesType =
-      selectedType === "all_types" || transaction.type === selectedType;
+      selectedType === 'all_types' || transaction.type === selectedType;
 
     const matchesDate = selectedDate
-      ? format(transaction.date, "yyyy-MM-dd") ===
-        format(selectedDate, "yyyy-MM-dd")
+      ? format(transaction.date, 'yyyy-MM-dd') ===
+        format(selectedDate, 'yyyy-MM-dd')
       : true;
 
     const matchesAdvancedSearch = performAdvancedSearch(transaction);
@@ -257,14 +257,14 @@ const TransactionTable = ({
 
   // Sort transactions
   const sortedTransactions = [...limitedTransactions].sort((a, b) => {
-    if (sortField === "amount") {
-      return sortDirection === "asc"
+    if (sortField === 'amount') {
+      return sortDirection === 'asc'
         ? a.amount - b.amount
         : b.amount - a.amount;
     }
 
-    if (sortField === "date") {
-      return sortDirection === "asc"
+    if (sortField === 'date') {
+      return sortDirection === 'asc'
         ? a.date.getTime() - b.date.getTime()
         : b.date.getTime() - a.date.getTime();
     }
@@ -272,7 +272,7 @@ const TransactionTable = ({
     const aValue = String(a[sortField]).toLowerCase();
     const bValue = String(b[sortField]).toLowerCase();
 
-    return sortDirection === "asc"
+    return sortDirection === 'asc'
       ? aValue.localeCompare(bValue)
       : bValue.localeCompare(aValue);
   });
@@ -282,37 +282,37 @@ const TransactionTable = ({
 
   const handleSort = (field: keyof Transaction) => {
     if (field === sortField) {
-      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
     } else {
       setSortField(field);
-      setSortDirection("asc");
+      setSortDirection('asc');
     }
   };
 
   const getSortIcon = (field: keyof Transaction) => {
     if (field !== sortField) return null;
-    return sortDirection === "asc" ? (
+    return sortDirection === 'asc' ? (
       <ChevronUp className="h-4 w-4" />
     ) : (
       <ChevronDown className="h-4 w-4" />
     );
   };
 
-  const getStatusBadge = (status: Transaction["status"]) => {
+  const getStatusBadge = (status: Transaction['status']) => {
     switch (status) {
-      case "completed":
+      case 'completed':
         return (
           <Badge variant="secondary" className="bg-green-100 text-green-800">
             Completed
           </Badge>
         );
-      case "pending":
+      case 'pending':
         return (
           <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
             Pending
           </Badge>
         );
-      case "failed":
+      case 'failed':
         return (
           <Badge variant="secondary" className="bg-red-100 text-red-800">
             Failed
@@ -323,9 +323,9 @@ const TransactionTable = ({
     }
   };
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("en-PH", {
-      style: "currency",
-      currency: "PHP",
+    return new Intl.NumberFormat('en-PH', {
+      style: 'currency',
+      currency: 'PHP',
     }).format(amount);
   };
   // Using the utility function for currency formatting
@@ -338,33 +338,33 @@ const TransactionTable = ({
     if (!selectedTransaction || !editReason) return;
 
     // In a real app, this would call an API to update the transaction
-    console.log("Transaction edited:", editedTransaction);
-    console.log("Edit reason:", editReason);
+    console.log('Transaction edited:', editedTransaction);
+    console.log('Edit reason:', editReason);
 
     // Close the dialog
     setIsEditDialogOpen(false);
-    setEditReason("");
+    setEditReason('');
   };
 
   // Mock transaction history data
   const transactionHistory = [
     {
-      date: new Date("2023-06-01T10:35:00"),
-      user: "John Doe",
-      action: "Created transaction",
-      details: "Initial transaction creation",
+      date: new Date('2023-06-01T10:35:00'),
+      user: 'John Doe',
+      action: 'Created transaction',
+      details: 'Initial transaction creation',
     },
     {
-      date: new Date("2023-06-01T14:22:00"),
-      user: "Jane Smith",
-      action: "Updated amount",
-      details: "Changed amount from ₱22.99 to ₱24.99",
+      date: new Date('2023-06-01T14:22:00'),
+      user: 'Jane Smith',
+      action: 'Updated amount',
+      details: 'Changed amount from ₱22.99 to ₱24.99',
     },
     {
-      date: new Date("2023-06-02T09:15:00"),
-      user: "System",
-      action: "Status change",
-      details: "Changed status from pending to completed",
+      date: new Date('2023-06-02T09:15:00'),
+      user: 'System',
+      action: 'Status change',
+      details: 'Changed status from pending to completed',
     },
   ];
 
@@ -447,8 +447,8 @@ const TransactionTable = ({
                   >
                     <Filter className="mr-2 h-4 w-4" />
                     {selectedDate
-                      ? format(selectedDate, "PPP")
-                      : "Filter by date"}
+                      ? format(selectedDate, 'PPP')
+                      : 'Filter by date'}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
@@ -481,125 +481,70 @@ const TransactionTable = ({
                 <TableRow>
                   <TableHead
                     className="cursor-pointer"
-                    onClick={() => handleSort("id")}
+                    onClick={() => handleSort('id')}
                   >
                     <div className="flex items-center">
-                      Transaction ID {getSortIcon("id")}
+                      Transaction ID {getSortIcon('id')}
                     </div>
                   </TableHead>
                   <TableHead
                     className="cursor-pointer"
-                    onClick={() => handleSort("date")}
+                    onClick={() => handleSort('date')}
                   >
                     <div className="flex items-center">
-                      Transaction Timestamp {getSortIcon("date")}
+                      Transaction Timestamp {getSortIcon('date')}
                     </div>
                   </TableHead>
                   <TableHead
                     className="cursor-pointer"
-                    onClick={() => handleSort("tenant")}
+                    onClick={() => handleSort('tenant')}
                   >
                     <div className="flex items-center">
-                      Tenant ID {getSortIcon("tenant")}
+                      Tenant ID {getSortIcon('tenant')}
                     </div>
                   </TableHead>
                   <TableHead
                     className="cursor-pointer"
-                    onClick={() => handleSort("terminal")}
+                    onClick={() => handleSort('terminal')}
                   >
                     <div className="flex items-center">
-                      Hardware ID {getSortIcon("terminal")}
+                      Hardware ID {getSortIcon('terminal')}
                     </div>
                   </TableHead>
                   <TableHead
                     className="cursor-pointer"
-                    onClick={() => handleSort("type")}
+                    onClick={() => handleSort('type')}
                   >
                     <div className="flex items-center">
-                      Transaction Type {getSortIcon("type")}
+                      Transaction Type {getSortIcon('type')}
                     </div>
                   </TableHead>
                   <TableHead
                     className="cursor-pointer text-right"
-                    onClick={() => handleSort("amount")}
+                    onClick={() => handleSort('amount')}
                   >
                     <div className="flex items-center justify-end">
-                      Gross Sales {getSortIcon("amount")}
+                      Gross Sales {getSortIcon('amount')}
                     </div>
                   </TableHead>
                   <TableHead
                     className="cursor-pointer"
-                    onClick={() => handleSort("status")}
+                    onClick={() => handleSort('status')}
                   >
                     <div className="flex items-center">
-                      Validation Status {getSortIcon("status")}
+                      Validation Status {getSortIcon('status')}
                     </div>
                   </TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {isLoading ? (
-                  <TableRow>
-                    <TableCell colSpan={8} className="h-24 text-center">
-                      Loading transactions...
-                    </TableCell>
-                  </TableRow>
-                ) : sortedTransactions.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={8} className="h-24 text-center">
-                      No transactions found.
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  sortedTransactions.map((transaction) => (
-                    <TableRow key={transaction.id}>
-                      <TableCell className="font-medium">
-                        {transaction.id}
-                      </TableCell>
-                      <TableCell>{formatTSMSDate(transaction.date)}</TableCell>
-                      <TableCell>{transaction.tenant}</TableCell>
-                      <TableCell>{transaction.terminal}</TableCell>
-                      <TableCell className="capitalize">
-                        {transaction.type}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        {formatTSMSCurrency(transaction.amount)}
-                      </TableCell>
-                      <TableCell>
-                        {getStatusBadge(transaction.status)}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex space-x-1 justify-end">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => {
-                              setSelectedTransaction(transaction);
-                              setEditedTransaction({
-                                ...transaction,
-                                date: new Date(transaction.date),
-                              });
-                              setIsEditDialogOpen(true);
-                            }}
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => {
-                              setSelectedTransaction(transaction);
-                              setIsHistoryDialogOpen(true);
-                            }}
-                          >
-                            <History className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
+                {transactions.map((transaction, index) => (
+                  <tr key={`${transaction.id}-${index}`}>
+                    <td>{transaction.id}</td>
+                    <td>{transaction.amount}</td>
+                  </tr>
+                ))}
               </TableBody>
             </Table>
           </div>
@@ -625,7 +570,7 @@ const TransactionTable = ({
               <Select
                 value={searchField as string}
                 onValueChange={(value) =>
-                  setSearchField(value as keyof Transaction | "all")
+                  setSearchField(value as keyof Transaction | 'all')
                 }
               >
                 <SelectTrigger className="col-span-3">
@@ -660,8 +605,8 @@ const TransactionTable = ({
             <Button
               variant="outline"
               onClick={() => {
-                setAdvancedSearchTerm("");
-                setSearchField("all");
+                setAdvancedSearchTerm('');
+                setSearchField('all');
                 setIsAdvancedSearchOpen(false);
               }}
             >
@@ -722,7 +667,7 @@ const TransactionTable = ({
                   onValueChange={(value) =>
                     setEditedTransaction({
                       ...editedTransaction,
-                      status: value as Transaction["status"],
+                      status: value as Transaction['status'],
                     })
                   }
                 >
@@ -798,7 +743,7 @@ const TransactionTable = ({
                         </p>
                       </div>
                       <div className="text-right text-sm">
-                        <p>{format(history.date, "MMM d, yyyy h:mm a")}</p>
+                        <p>{format(history.date, 'MMM d, yyyy h:mm a')}</p>
                         <p className="text-muted-foreground">
                           By: {history.user}
                         </p>

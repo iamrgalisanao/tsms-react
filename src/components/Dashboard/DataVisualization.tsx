@@ -1,65 +1,66 @@
-import React, { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+} from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { format } from "date-fns";
+} from '@/components/ui/popover';
+import { format } from 'date-fns';
 import {
   CalendarIcon,
   BarChart3Icon,
   LineChartIcon,
   PieChartIcon,
   Download,
-} from "lucide-react";
-import RealtimeChart from "./RealtimeChart";
+} from 'lucide-react';
+import RealtimeChart from './RealtimeChart';
 
 interface DataVisualizationProps {
   salesData?: any[];
   tenants?: string[];
+  fullView?: boolean; // Add the fullView prop as an optional boolean
 }
 
 const DataVisualization = ({
   salesData = [
-    { date: "2023-01-01", tenant: "Tenant A", sales: 5200 },
-    { date: "2023-01-02", tenant: "Tenant A", sales: 4800 },
-    { date: "2023-01-03", tenant: "Tenant A", sales: 5500 },
-    { date: "2023-01-04", tenant: "Tenant A", sales: 6100 },
-    { date: "2023-01-05", tenant: "Tenant A", sales: 5900 },
-    { date: "2023-01-01", tenant: "Tenant B", sales: 3200 },
-    { date: "2023-01-02", tenant: "Tenant B", sales: 3500 },
-    { date: "2023-01-03", tenant: "Tenant B", sales: 3800 },
-    { date: "2023-01-04", tenant: "Tenant B", sales: 4100 },
-    { date: "2023-01-05", tenant: "Tenant B", sales: 3900 },
-    { date: "2023-01-01", tenant: "Tenant C", sales: 2200 },
-    { date: "2023-01-02", tenant: "Tenant C", sales: 2500 },
-    { date: "2023-01-03", tenant: "Tenant C", sales: 2800 },
-    { date: "2023-01-04", tenant: "Tenant C", sales: 3100 },
-    { date: "2023-01-05", tenant: "Tenant C", sales: 2900 },
+    { date: '2023-01-01', tenant: 'Tenant A', sales: 5200 },
+    { date: '2023-01-02', tenant: 'Tenant A', sales: 4800 },
+    { date: '2023-01-03', tenant: 'Tenant A', sales: 5500 },
+    { date: '2023-01-04', tenant: 'Tenant A', sales: 6100 },
+    { date: '2023-01-05', tenant: 'Tenant A', sales: 5900 },
+    { date: '2023-01-01', tenant: 'Tenant B', sales: 3200 },
+    { date: '2023-01-02', tenant: 'Tenant B', sales: 3500 },
+    { date: '2023-01-03', tenant: 'Tenant B', sales: 3800 },
+    { date: '2023-01-04', tenant: 'Tenant B', sales: 4100 },
+    { date: '2023-01-05', tenant: 'Tenant B', sales: 3900 },
+    { date: '2023-01-01', tenant: 'Tenant C', sales: 2200 },
+    { date: '2023-01-02', tenant: 'Tenant C', sales: 2500 },
+    { date: '2023-01-03', tenant: 'Tenant C', sales: 2800 },
+    { date: '2023-01-04', tenant: 'Tenant C', sales: 3100 },
+    { date: '2023-01-05', tenant: 'Tenant C', sales: 2900 },
   ],
-  tenants = ["Tenant A", "Tenant B", "Tenant C", "Tenant D", "Tenant E"],
+  tenants = ['Tenant A', 'Tenant B', 'Tenant C', 'Tenant D', 'Tenant E'],
 }: DataVisualizationProps) => {
-  const [selectedTab, setSelectedTab] = useState("trends");
+  const [selectedTab, setSelectedTab] = useState('trends');
   const [selectedTenants, setSelectedTenants] = useState<string[]>([
-    "Tenant A",
-    "Tenant B",
+    'Tenant A',
+    'Tenant B',
   ]);
   const [dateRange, setDateRange] = useState<{
     from: Date;
     to?: Date;
   }>({ from: new Date(new Date().setDate(new Date().getDate() - 7)) });
-  const [chartType, setChartType] = useState("line");
+  const [chartType, setChartType] = useState('line');
 
   const handleTenantToggle = (tenant: string) => {
     if (selectedTenants.includes(tenant)) {
@@ -76,25 +77,25 @@ const DataVisualization = ({
           <span>Data Visualization</span>
           <div className="flex items-center space-x-2 text-black">
             <Button
-              variant={chartType === "line" ? "default" : "outline"}
+              variant={chartType === 'line' ? 'default' : 'outline'}
               size="sm"
-              onClick={() => setChartType("line")}
+              onClick={() => setChartType('line')}
               className="h-8 w-8 p-0"
             >
               <LineChartIcon className="h-4 w-4" />
             </Button>
             <Button
-              variant={chartType === "bar" ? "default" : "outline"}
+              variant={chartType === 'bar' ? 'default' : 'outline'}
               size="sm"
-              onClick={() => setChartType("bar")}
+              onClick={() => setChartType('bar')}
               className="h-8 w-8 p-0"
             >
               <BarChart3Icon className="h-4 w-4" />
             </Button>
             <Button
-              variant={chartType === "pie" ? "default" : "outline"}
+              variant={chartType === 'pie' ? 'default' : 'outline'}
               size="sm"
-              onClick={() => setChartType("pie")}
+              onClick={() => setChartType('pie')}
               className="h-8 w-8 p-0"
             >
               <PieChartIcon className="h-4 w-4" />
@@ -129,11 +130,11 @@ const DataVisualization = ({
                     {dateRange.from ? (
                       dateRange.to ? (
                         <>
-                          {format(dateRange.from, "LLL dd, y")} -{" "}
-                          {format(dateRange.to, "LLL dd, y")}
+                          {format(dateRange.from, 'LLL dd, y')} -{' '}
+                          {format(dateRange.to, 'LLL dd, y')}
                         </>
                       ) : (
-                        format(dateRange.from, "LLL dd, y")
+                        format(dateRange.from, 'LLL dd, y')
                       )
                     ) : (
                       <span>Pick a date range</span>
@@ -150,7 +151,7 @@ const DataVisualization = ({
                 </PopoverContent>
               </Popover>
 
-              {selectedTab === "comparison" && (
+              {selectedTab === 'comparison' && (
                 <Select>
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Select tenants" />
@@ -169,19 +170,19 @@ const DataVisualization = ({
 
           <TabsContent value="trends" className="space-y-4 text-white">
             <RealtimeChart
-              title={<span className="text-white">Sales Trends</span>}
-              type={chartType as "line" | "bar" | "pie"}
+              title="Sales Trends"
+              type={chartType as 'line' | 'bar' | 'pie'}
               data={[
-                { name: "Mon", value: 4200, previousValue: 3800 },
-                { name: "Tue", value: 4800, previousValue: 4100 },
-                { name: "Wed", value: 5100, previousValue: 4600 },
-                { name: "Thu", value: 5900, previousValue: 5200 },
-                { name: "Fri", value: 6200, previousValue: 5500 },
-                { name: "Sat", value: 5400, previousValue: 5100 },
-                { name: "Sun", value: 4100, previousValue: 3900 },
+                { name: 'Mon', value: 4200, previousValue: 3800 },
+                { name: 'Tue', value: 4800, previousValue: 4100 },
+                { name: 'Wed', value: 5100, previousValue: 4600 },
+                { name: 'Thu', value: 5900, previousValue: 5200 },
+                { name: 'Fri', value: 6200, previousValue: 5500 },
+                { name: 'Sat', value: 5400, previousValue: 5100 },
+                { name: 'Sun', value: 4100, previousValue: 3900 },
               ]}
-              dataKeys={["value", "previousValue"]}
-              colors={["#0ea5e9", "#94a3b8"]}
+              dataKeys={['value', 'previousValue']}
+              colors={['#0ea5e9', '#94a3b8']}
             />
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -229,26 +230,46 @@ const DataVisualization = ({
 
           <TabsContent value="comparison" className="space-y-4">
             <RealtimeChart
-              title={`Tenant Comparison: ${selectedTenants.join(" vs ")}`}
-              type={chartType as "line" | "bar" | "pie"}
+              title={`Tenant Comparison: ${selectedTenants.join(' vs ')}`}
+              type={chartType as 'line' | 'bar' | 'pie'}
               data={
-                chartType === "pie"
+                chartType === 'pie'
                   ? [
-                      { name: "Tenant A", value: 35 },
-                      { name: "Tenant B", value: 25 },
-                      { name: "Tenant C", value: 20 },
-                      { name: "Tenant D", value: 15 },
-                      { name: "Tenant E", value: 5 },
+                      { id: 1, name: 'Tenant A', value: 35 },
+                      { id: 2, name: 'Tenant B', value: 25 },
+                      { id: 3, name: 'Tenant C', value: 20 },
+                      { id: 4, name: 'Tenant D', value: 15 },
+                      { id: 5, name: 'Tenant E', value: 5 },
                     ]
                   : [
-                      { name: "Week 1", "Tenant A": 4200, "Tenant B": 3800 },
-                      { name: "Week 2", "Tenant A": 4800, "Tenant B": 4100 },
-                      { name: "Week 3", "Tenant A": 5100, "Tenant B": 4600 },
-                      { name: "Week 4", "Tenant A": 5900, "Tenant B": 5200 },
+                      {
+                        name: 'Week 1',
+                        value: 4200,
+                        'Tenant A': 4200,
+                        'Tenant B': 3800,
+                      },
+                      {
+                        name: 'Week 2',
+                        value: 4800,
+                        'Tenant A': 4800,
+                        'Tenant B': 4100,
+                      },
+                      {
+                        name: 'Week 3',
+                        value: 5100,
+                        'Tenant A': 5100,
+                        'Tenant B': 4600,
+                      },
+                      {
+                        name: 'Week 4',
+                        value: 5900,
+                        'Tenant A': 5900,
+                        'Tenant B': 5200,
+                      },
                     ]
               }
-              dataKeys={chartType === "pie" ? ["value"] : selectedTenants}
-              colors={["#0ea5e9", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"]}
+              dataKeys={chartType === 'pie' ? ['value'] : selectedTenants}
+              colors={['#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6']}
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -286,13 +307,13 @@ const DataVisualization = ({
               </h3>
               <div className="space-y-2">
                 {tenants.slice(0, 5).map((tenant, index) => (
-                  <div key={tenant} className="flex items-center">
+                  <div key={`${tenant}-${index}`} className="flex items-center">
                     <div className="w-8 text-sm font-medium">{index + 1}</div>
                     <div className="flex-1">{tenant}</div>
                     <div className="text-sm font-medium">
                       $
                       {Math.floor(
-                        5000 - index * 800 + Math.random() * 500,
+                        5000 - index * 800 + Math.random() * 500
                       ).toLocaleString()}
                     </div>
                   </div>
