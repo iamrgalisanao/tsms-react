@@ -542,7 +542,44 @@ const TransactionTable = ({
                 {transactions.map((transaction, index) => (
                   <tr key={`${transaction.id}-${index}`}>
                     <td>{transaction.id}</td>
-                    <td>{transaction.amount}</td>
+                    <td>{formatTSMSDate(transaction.date)}</td>
+                    <td>{transaction.tenant}</td>
+                    <td>{transaction.terminal}</td>
+                    <td>{transaction.type}</td>
+                    <td className="text-right">
+                      {' '}
+                      {formatTSMSCurrency(transaction.amount)}
+                    </td>
+                    <td> {getStatusBadge(transaction.status)}</td>
+                    <td>
+                      {' '}
+                      <div className="flex space-x-1 justify-end">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => {
+                            setSelectedTransaction(transaction);
+                            setEditedTransaction({
+                              ...transaction,
+                              date: new Date(transaction.date),
+                            });
+                            setIsEditDialogOpen(true);
+                          }}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => {
+                            setSelectedTransaction(transaction);
+                            setIsHistoryDialogOpen(true);
+                          }}
+                        >
+                          <History className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </TableBody>

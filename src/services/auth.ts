@@ -201,7 +201,7 @@ export const useAuth = () => {
   const logout = () => {
     setCurrentUser(null);
     localStorage.removeItem('currentUser'); // Clear stored user data
-    navigate('/login'); // Redirect to login page
+    navigate('/'); // Redirect to login page
   };
 
   // Request password reset function

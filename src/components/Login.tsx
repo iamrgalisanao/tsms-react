@@ -24,7 +24,12 @@ const Login = () => {
         title: 'Login successful',
         description: 'Welcome to Tenant Sales Management System',
       });
-      navigate('/'); // Redirect to the home page after successful login
+      // if (email === 'admin@example.com') {
+      //   navigate('/home'); // Redirect to AdminDashboard
+      // } else if (email === 'finance@example.com') {
+      //   navigate('/home');
+      navigate('/home'); // Redirect to Home
+      // navigate('/'); // Redirect to the home page after successful login
     } catch (err) {
       toast({
         title: 'Login failed',
